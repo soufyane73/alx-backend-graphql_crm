@@ -36,9 +36,9 @@ def log_crm_heartbeat():
 def update_low_stock():
     """
     Update low stock products by executing a GraphQL mutation.
-    Logs the updates to /tmp/lowstockupdates_log.txt
+    Logs the updates to /tmp/low_stock_updates_log.txt
     """
-    log_file = '/tmp/lowstockupdates_log.txt'
+    log_file = '/tmp/low_stock_updates_log.txt'
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     try:
@@ -50,10 +50,10 @@ def update_low_stock():
         
         mutation = gql("""
         mutation UpdateStock($amount: Int!) {
-            update_low_stock_products(restockAmount: $amount) {
+            updateLowStockProducts(restockAmount: $amount) {
                 success
                 message
-                updated_products {
+                updatedProducts {
                     id
                     name
                     stock
@@ -65,10 +65,10 @@ def update_low_stock():
         result = client.execute(mutation, variable_values={"amount": 10})
         
         log_message = f"\n=== Low Stock Update - {timestamp} ===\n"
-        
-        if result.get('update_low_stock_products', {}).get('success'):
-            updated_products = result['update_low_stock_products'].get('updated_products', [])
-            log_message += f"{result['update_low_stock_products']['message']}\n"
+
+        if result.get('updateLowStockProducts', {}).get('success'):
+            updated_products = result['updateLowStockProducts'].get('updatedProducts', [])
+            log_message += f"{result['updateLowStockProducts']['message']}\n"
             
             if updated_products:
                 log_message += "Updated products:\n"
