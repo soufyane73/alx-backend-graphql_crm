@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from django.db.models import F
 from .models import Product
+from crm.models import Product
 
 class ProductType(DjangoObjectType):
     class Meta:
